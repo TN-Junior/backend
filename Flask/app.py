@@ -6,6 +6,7 @@ CORS(app)
 
 # Banco de dados em memória para armazenar os participantes
 participants = []
+next_id = 1  # Inicializa o ID auto-incrementado
 
 @app.route("/participants", methods=["GET"])
 def get_participants():
@@ -14,7 +15,8 @@ def get_participants():
 
 @app.route("/participants", methods=["POST"])
 def add_participant():
-    """Adiciona um novo participante ao banco de dados."""
+    """Adiciona um novo participante ao banco de dados com ID auto-incrementado."""
+    global next_id
     try:
         data = request.json
         first_name = data.get("firstName", "").strip()
@@ -27,21 +29,46 @@ def add_participant():
         if not isinstance(participation, int) or participation < 1 or participation > 100:
             return jsonify({"error": "Participation must be a number between 1 and 100"}), 400
 
-        participants.append({
+        # Criando novo participante com ID auto-incrementado
+        participant = {
+            "id": next_id,
             "firstName": first_name,
             "lastName": last_name,
-            "participation": participation  # Mantendo o valor exato
-        })
+            "participation": participation
+        }
 
-        return jsonify({"message": "Participant added successfully"}), 201
+        participants.append(participant)
+        next_id += 1  # Incrementa o ID para o próximo participante
+
+        return jsonify({"message": "Participant added successfully", "participant": participant}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/participants/<int:id>", methods=["PUT"])
+def update_participant(id):
+    """Atualiza um participante pelo ID."""
+    data = request.json
+    for participant in participants:
+        if participant["id"] == id:
+            participant["firstName"] = data.get("firstName", participant["firstName"])
+            participant["lastName"] = data.get("lastName", participant["lastName"])
+            participant["participation"] = data.get("participation", participant["participation"])
+            return jsonify({"message": "Participant updated successfully", "participant": participant}), 200
+    return jsonify({"error": "Participant not found"}), 404
+
+@app.route("/participants/<int:id>", methods=["DELETE"])
+def delete_participant(id):
+    """Remove um participante pelo ID."""
+    global participants
+    participants = [p for p in participants if p["id"] != id]
+    return jsonify({"message": f"Participant with ID {id} deleted successfully"}), 200
+
 @app.route("/participants", methods=["DELETE"])
 def reset_participants():
-    """Reseta a lista de participantes."""
-    global participants
+    """Reseta a lista de participantes e reinicia o contador de ID."""
+    global participants, next_id
     participants = []
+    next_id = 1  # Reinicia o contador de IDs
     return jsonify({"message": "Participants reset successfully"}), 200
 
 if __name__ == "__main__":
