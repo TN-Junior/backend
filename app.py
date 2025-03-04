@@ -1,35 +1,35 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import os
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 CORS(app)
 
-# Configurar o banco de dados SQLite
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///instance/participants.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# Configuração do SQLite
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/participants.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Modelo do Banco de Dados
 class Participant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    firstName = db.Column(db.String(50), nullable=False)
-    lastName = db.Column(db.String(50), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
     participation = db.Column(db.Integer, nullable=False)
 
-# Criar o banco de dados caso não exista
+# Criar as tabelas no banco de dados
 with app.app_context():
-    if not os.path.exists("instance/participants.db"):
-        db.create_all()
+    db.create_all()
 
 @app.route("/participants", methods=["GET"])
 def get_participants():
     participants = Participant.query.all()
-    return jsonify([
-        {"id": p.id, "firstName": p.firstName, "lastName": p.lastName, "participation": p.participation}
-        for p in participants
-    ])
+    return jsonify([{
+        "id": p.id,
+        "firstName": p.first_name,
+        "lastName": p.last_name,
+        "participation": p.participation
+    } for p in participants])
 
 @app.route("/participants", methods=["POST"])
 def add_participant():
@@ -44,12 +44,19 @@ def add_participant():
         if not isinstance(participation, int) or participation < 1 or participation > 100:
             return jsonify({"error": "Participation must be a number between 1 and 100"}), 400
 
-        participant = Participant(firstName=first_name, lastName=last_name, participation=participation)
-        db.session.add(participant)
+        new_participant = Participant(
+            first_name=first_name,
+            last_name=last_name,
+            participation=participation
+        )
+        db.session.add(new_participant)
         db.session.commit()
 
         return jsonify({"message": "Participant added successfully", "participant": {
-            "id": participant.id, "firstName": participant.firstName, "lastName": participant.lastName, "participation": participant.participation
+            "id": new_participant.id,
+            "firstName": new_participant.first_name,
+            "lastName": new_participant.last_name,
+            "participation": new_participant.participation
         }}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -61,13 +68,16 @@ def update_participant(id):
         return jsonify({"error": "Participant not found"}), 404
 
     data = request.json
-    participant.firstName = data.get("firstName", participant.firstName)
-    participant.lastName = data.get("lastName", participant.lastName)
+    participant.first_name = data.get("firstName", participant.first_name)
+    participant.last_name = data.get("lastName", participant.last_name)
     participant.participation = data.get("participation", participant.participation)
-
+    
     db.session.commit()
     return jsonify({"message": "Participant updated successfully", "participant": {
-        "id": participant.id, "firstName": participant.firstName, "lastName": participant.lastName, "participation": participant.participation
+        "id": participant.id,
+        "firstName": participant.first_name,
+        "lastName": participant.last_name,
+        "participation": participant.participation
     }}), 200
 
 @app.route("/participants/<int:id>", methods=["DELETE"])
@@ -78,13 +88,13 @@ def delete_participant(id):
 
     db.session.delete(participant)
     db.session.commit()
-    return jsonify({"message": f"Participant {id} deleted successfully"}), 200
+    return jsonify({"message": f"Participant with ID {id} deleted successfully"}), 200
 
 @app.route("/participants", methods=["DELETE"])
 def reset_participants():
     db.session.query(Participant).delete()
     db.session.commit()
-    return jsonify({"message": "All participants deleted successfully"}), 200
+    return jsonify({"message": "Participants reset successfully"}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
