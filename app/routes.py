@@ -1,9 +1,10 @@
 from flask import Blueprint, request, jsonify
-from models.participant import db, Participant
+from .models import Participant
+from . import db
 
-participant_bp = Blueprint('participant', __name__)
+main = Blueprint('main', __name__)
 
-@participant_bp.route("/participants", methods=["GET", "POST", "OPTIONS"])
+@main.route("/participants", methods=["GET", "POST", "OPTIONS"])
 def participants():
     if request.method == "OPTIONS":
         response = jsonify({"message": "OK"})
@@ -11,7 +12,7 @@ def participants():
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type")
         return response
-    
+
     if request.method == "GET":
         participants = Participant.query.all()
         return jsonify([{
@@ -49,3 +50,34 @@ def participants():
             }}), 201
         except Exception as e:
             return jsonify({"error": str(e)}), 500
+
+@main.route("/participants/<int:id>", methods=["PUT", "DELETE"])
+def participant(id):
+    participant = Participant.query.get(id)
+    if not participant:
+        return jsonify({"error": "Participant not found"}), 404
+
+    if request.method == "PUT":
+        data = request.json
+        participant.first_name = data.get("firstName", participant.first_name)
+        participant.last_name = data.get("lastName", participant.last_name)
+        participant.participation = data.get("participation", participant.participation)
+
+        db.session.commit()
+        return jsonify({"message": "Participant updated successfully", "participant": {
+            "id": participant.id,
+            "firstName": participant.first_name,
+            "lastName": participant.last_name,
+            "participation": participant.participation
+        }}), 200
+
+    if request.method == "DELETE":
+        db.session.delete(participant)
+        db.session.commit()
+        return jsonify({"message": f"Participant with ID {id} deleted successfully"}), 200
+
+@main.route("/participants", methods=["DELETE"])
+def reset_participants():
+    db.session.query(Participant).delete()
+    db.session.commit()
+    return jsonify({"message": "Participants reset successfully"}), 200
