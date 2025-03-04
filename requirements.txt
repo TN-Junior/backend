@@ -3,3 +3,4 @@ flask-cors
 flask-sqlalchemy
 pytest
 Flask-Testing
+pytest-flask
