@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Configuração do SQLite
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/participants.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
