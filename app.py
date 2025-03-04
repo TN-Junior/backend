@@ -26,8 +26,9 @@ with app.app_context():
 @app.route("/participants", methods=["GET", "POST", "OPTIONS"])
 def participants():
     if request.method == "OPTIONS":
+        # Resposta da requisição OPTIONS para CORS
         response = jsonify({"message": "OK"})
-        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Origin", "*")  # Permitir acesso de todos os domínios autorizados
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type")
         return response
