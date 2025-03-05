@@ -57,24 +57,7 @@ Para rodar um banco de dados MySQL localmente utilizando Docker, você pode exec
 docker run --name mysql-database -e MYSQL_ROOT_PASSWORD="root_password_teste" -e MYSQL_USER="user_teste" -e MYSQL_PASSWORD="password_teste" -e MYSQL_DATABASE=" " -p 3306:3306 -d mysql:5.7
 ```
 
-## Tecnologias Usadas
 
-- **Frontend**:
-  - React
-  - TypeScript
-  - Vite
-  - Axios
-  - React Router
-  - React Testing Library
-  - TailwindCss
-
-- **Backend**:
-  - Python
-  - Flask
-  - SQLAlchemy
-  - Flask-CORS
-  - Pytest
- 
 ## Boas Práticas de Desenvolvimento
 
 Organização do Código: O código é modularizado, com componentes reutilizáveis e bem organizados. As funções são separadas por responsabilidades, e os componentes React são compostos de forma clara.
