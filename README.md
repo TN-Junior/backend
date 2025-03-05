@@ -49,14 +49,6 @@ A estrutura do projeto está organizada de acordo com as responsabilidades de ca
 - **Banco de Dados**: Utiliza um banco de dados para persistir as informações de participantes. Foi utilizado um banco de dados MySQL para armazenar as entidades.
 - **Tratamento de Exceções**: Exceções específicas são tratadas e retornadas com status HTTP adequado, utilizando uma abordagem de gerenciamento centralizado de erros.
 
-## Como Criar um Banco de Dados MySQL Local com Docker
-
-Para rodar um banco de dados MySQL localmente utilizando Docker, você pode executar o seguinte comando no terminal:
-
-```bash
-docker run --name mysql-database -e MYSQL_ROOT_PASSWORD="root_password_teste" -e MYSQL_USER="user_teste" -e MYSQL_PASSWORD="password_teste" -e MYSQL_DATABASE=" " -p 3306:3306 -d mysql:5.7
-```
-
 
 ## Boas Práticas de Desenvolvimento
 
