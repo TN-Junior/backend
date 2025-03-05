@@ -4,7 +4,7 @@
 https://www.notion.so/Desafio-Oncase-Full-Stack-1a904eaa22ab80428738f137f865cea1?pvs=4
 
 ## Visão Geral
-Este projeto é uma aplicação Full Stack desenvolvida utilizando React e o framework Flask e SQL para persistência de dados utilizando o banco de dados MySQL. A aplicação consiste em uma interface onde o usuário insere dados em um formulário e ao enviá-los, são armazenados em uma tabela e atualizados em um gráfico de pizza.
+Este projeto é uma aplicação Full Stack desenvolvida com React no front-end, Flask no back-end e MySQL para persistência de dados, com o banco de dados hospedado no AWS RDS. A aplicação apresenta uma interface onde o usuário pode inserir dados por meio de um formulário. Esses dados são armazenados em uma tabela MySQL e utilizados para atualizar dinamicamente um gráfico de pizza.
 
 ## Estrutura do Projeto
 A estrutura do projeto está organizada de acordo com as responsabilidades de cada camada, facilitando a escalabilidade e manutenção da aplicação.
