@@ -69,11 +69,75 @@ Performance: A performance é otimizada com uso de hooks do React como useCallba
 
 Segurança: O backend utiliza CORS para controlar as origens permitidas, protegendo as rotas da aplicação. Além disso, a configuração do banco de dados garante segurança nas credenciais e na comunicação via ambiente.
 
+## 🔧 Executando o projeto
+
+### **1️⃣ Clonar o repositório**
+```bash
+git clone https://github.com/seu-usuario/desafio-oncase.git
+cd desafio-oncase
+
+# Configurar e iniciar o backend
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # (Linux/Mac) ou venv\Scripts\activate (Windows)
+pip install -r requirements.txt
+python run.py
+
+# Configurar e iniciar o frontend
+cd ../frontend
+npm install
+npm run dev
+```
+## Endpoints da API
+
+GET /participants
+```bash
+[
+  { "id": 1, "first_name": "Lucas", "last_name": "Felpi", "participation": 5 },
+  { "id": 2, "first_name": "Fernanda", "last_name": "Kipper", "participation": 15 },
+  { "id": 3, "first_name": "Telma", "last_name": "Pereira", "participation": 50 },
+  { "id": 4, "first_name": "Filipe", "last_name": "Santos", "participation": 25 },
+  { "id": 5, "first_name": "John", "last_name": "Goes", "participation": 30 }
+]
+```
+POST /participants
+
+``` bash
+
+{
+  "first_name": "Pedro",
+  "last_name": "Henrique",
+  "participation": 85
+}
+```
+PUT /api/participantes/1
+
+``` bash
+{
+  "first_name": "Lucas",
+  "last_name": "Felpi",
+  "participation": 10
+}
+```
+DELETE /participants/1
+
+
+## Conclusão
+
+Este projeto foi desenvolvido seguindo boas práticas de desenvolvimento Full Stack, utilizando React, Flask e MySQL. A estrutura modular facilita a escalabilidade, manutenção e garante uma boa performance.
+
+
+
+
+
+
+
+
+
+
+
 
  
-## Interface
- 
-  ![image](https://github.com/user-attachments/assets/3f9ce7d5-9116-4e3d-8641-d128304a1415)
 
 
 
