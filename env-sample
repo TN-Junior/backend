@@ -1,0 +1,4 @@
+MYSQL_ROOT_PASSWORD=oncase
+MYSQL_DATABASE=sql_oncase
+MYSQL_USER=oncase_teste
+MYSQL_PASSWORD=oncase12345

@@ -4,3 +4,5 @@ flask-sqlalchemy
 pytest
 Flask-Testing
 pytest-flask
+mysqlclient
+python-dotenv
